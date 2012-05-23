@@ -1,6 +1,10 @@
 require 'rubygems'
+require 'bundler/setup'
 require 'sinatra'
-require 'builder'
+
+#Databases.
+
+
 
 get '/' do
   erb :index
