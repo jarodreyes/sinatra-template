@@ -1,10 +1,11 @@
 source 'http://rubygems.org'
 
 gem "json"
-gem 'sinatra', '1.3.0'
-gem 'aws-s3'
+gem 'sinatra'
+#gem 'aws-s3'
 gem 'unicorn'
-#gem 'sinatra-flash'
+gem 'sinatra-flash'
+gem 'bcrypt-ruby'
 
 #datamapper
 
@@ -24,5 +25,6 @@ group :development do
   gem 'heroku'
   gem 'foreman'
   gem 'dm-sqlite-adapter',      :git => 'https://github.com/datamapper/dm-sqlite-adapter.git'
+  gem 'tux'
 end
 
