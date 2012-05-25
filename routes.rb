@@ -11,14 +11,14 @@ get "/" do
      user.email = user_fb['email']
      user.created_at = Time.now
      user.token =  SecureRandom.hex
-     authentication = Authenfication.first_or_create({ :uid => user_fb["id"]}, {
-            :uid => user_fb["id"],
-            :nickname => user_fb["username"], 
-            :name => user_fb["name"],
-            :created_at => Time.now })
+     user.nickname = user_fb["username"]
+     user.name = user_fb["name"] 
+     user.email_confirmation = true
+     
+     authentication = Authenfication.first_or_create({ :uid => user_fb["id"]}, {:uid => user_fb["id"], :created_at => Time.now })
     
-       user.authenfications << authentication
-       user.save!
+     user.authenfications << authentication
+     user.save!
     end
     unless authentication
       session[:user] = authentication.user.token 
@@ -26,6 +26,11 @@ get "/" do
     end
   end
   erb :index
+end
+
+get "/email" do
+  u = User.first
+  resp = u.send_email_confirmation
 end
 
 get "/signup" do
@@ -37,14 +42,29 @@ post "/signup" do
   user.password_salt = BCrypt::Engine.generate_salt
   user.password_hash = BCrypt::Engine.hash_secret(params[:user][:password], user.password_salt)
   if user.save
-    flash[:info] = "Thank you for registering #{user.email}" 
-    session[:user] = user.token
+    user.send_email_confirmation
+    flash[:info] = "Email confirmation has sent" 
+    #session[:user] = user.token
     redirect "/" 
   else
-    session[:errors] = user.errors.full_messages
+    flash[:error] =  user.errors.full_messages.join(",") 
     redirect "/signup?" + hash_to_query_string(params[:user])
   end
 end
+
+get '/confirmation/:code' do
+  u = User.first(:email_code => params[:code])
+  unless u.nil?
+    u.email_confirmation = true
+    u.save!
+    flash[:sucess] = "<strong>Well done!</strong> Sucess signup"
+    session[:user] = u.token
+  else
+    flash[:error] = "Not authorized"
+  end
+  redirect "/"
+end
+
 
 get "/login" do
   if current_user
@@ -55,18 +75,13 @@ get "/login" do
 end
 
 post "/login" do
-  if user = User.first(:email => params[:email])
-    if user.password_hash == BCrypt::Engine.hash_secret(params[:password], user.password_salt)
+  if user = User.authenticate(params[:email],params[:password])
     session[:user] = user.token 
    response.set_cookie("user", {:value => user.token, :expires => (Time.now + 52*7*24*60*60)}) if params[:remember_me]
     redirect_last
-    else
-      flash[:error] = "Email/Password combination does not match"
-      redirect "/login?email=#{params[:email]}"
-    end
   else
-    flash[:error] = "That email address is not recognised"
-    redirect "/login?email=#{params[:email]}"
+    fash[:error] = "Your are not athorized"
+    redirect "/login"
   end
 end
 
@@ -114,6 +129,7 @@ get '/auth/facebook/callback' do
     user.email = user_fb['email']
     user.created_at = Time.now
     user.token =  SecureRandom.hex
+    user.email_confirmation = true
     begin
       authentication = Authenfication.first_or_create({ :uid => user_fb["id"]}, {
            :uid => user_fb["id"],

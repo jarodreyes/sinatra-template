@@ -1,9 +1,8 @@
 helpers do
   def authenticator
-    #TO DO REMPLACER PAR  DES EVN
-    #@authenticator ||= Koala::Facebook::OAuth.new(ENV["FACEBOOK_APP_ID"], ENV["FACEBOOK_SECRET"], url("/auth/facebook/callback"))
-    @authenticator ||= Koala::Facebook::OAuth.new('367406863305263', '85db8b89b88b408e9a04dcf4021e9c95', url("/auth/facebook/callback"))
+    @authenticator ||= Koala::Facebook::OAuth.new(ENV["FACEBOOK_APP_ID"], ENV["FACEBOOK_SECRET"], url("/auth/facebook/callback"))
   end
+  
   # Convert a hash to a querystring for form population
   def hash_to_query_string(hash)
     hash.delete "password"

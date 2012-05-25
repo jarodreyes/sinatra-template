@@ -6,7 +6,7 @@ gem 'unicorn'
 gem 'sinatra-flash'
 gem 'bcrypt-ruby'
 gem 'koala'
-
+gem 'pony'
 #datamapper
 
 gem 'dm-core' ,               :git => 'https://github.com/datamapper/dm-core.git'

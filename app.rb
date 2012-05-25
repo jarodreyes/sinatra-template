@@ -11,6 +11,7 @@ require 'dm-migrations'
 require 'dm-types'
 require 'sinatra/flash'
 require 'koala'
+require 'Pony'
 
 #Configurations
 configure do
