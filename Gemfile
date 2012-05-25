@@ -2,10 +2,10 @@ source 'http://rubygems.org'
 
 gem "json"
 gem 'sinatra'
-#gem 'aws-s3'
 gem 'unicorn'
 gem 'sinatra-flash'
 gem 'bcrypt-ruby'
+gem 'koala'
 
 #datamapper
 
@@ -18,7 +18,6 @@ gem 'dm-timestamps',          :git => 'https://github.com/datamapper/dm-timestam
 gem 'dm-migrations',          :git => 'https://github.com/datamapper/dm-migrations.git'
 gem 'dm-types',               :git => 'https://github.com/datamapper/dm-types.git'
 gem 'dm-postgres-adapter',    :git => 'https://github.com/datamapper/dm-postgres-adapter.git'
-#gem 'sinatra-authorization', :git => 'git://github.com/sr/sinatra-authorization.git'
 
 group :development do
   gem 'sinatra-reloader'

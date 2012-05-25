@@ -1,5 +1,9 @@
 <% if current_user %>
   <p>Logged in as <%= current_user.email %> | <a href="/logout">logout</a></p>
 <% else %>
-  <p><a href="/login">login</a> | <a href="/signup">register</a></p>
+<ul>
+	<li><a href="/auth/facebook" class="btn btn-primary">login with Facebook</a></li>
+	<li><a href="/login" class="btn">regular account</a></li>
+</ul>
+You don't have an account yet? <a href="/signup">Sign Up</a></p>
 <% end %>

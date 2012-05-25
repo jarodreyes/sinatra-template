@@ -1,4 +1,7 @@
 helpers do
+  def authenticator
+    @authenticator ||= Koala::Facebook::OAuth.new(ENV["FACEBOOK_APP_ID"], ENV["FACEBOOK_SECRET"], url("/auth/facebook/callback"))
+  end
   # Convert a hash to a querystring for form population
   def hash_to_query_string(hash)
     hash.delete "password"
@@ -79,11 +82,5 @@ helpers do
     messages = flash(key).collect {|message| "  <div class='alert alert-#{message[0]}'>#{message[1]}</div>\n"}
     "<div id='#{id}'>\n" + messages.join + "</div>"
   end 
- 
+  
 end
-
-# Clear out sessions
-at_exit do
-  session[:errors] = nil
-end
-

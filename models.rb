@@ -18,9 +18,10 @@ class User
   validates_length_of           :password, :min => 6
 
   after :create do
+    p "CREATE USER"
     self.token = SecureRandom.hex
   end
-
+  
   def generate_token
     self.update!(:token => SecureRandom.hex)
   end
@@ -28,7 +29,22 @@ class User
   def admin?
     self.admin
   end
+  
+  has n, :authenfications
+end
 
+class Authenfication
+  include DataMapper::Resource
+  
+  property :id,         Serial
+  property :uid,        String
+  property :name,       String
+  property :nickname,   String
+  property :created_at, DateTime
+  
+  belongs_to :user
+
+  
 end
 
 DataMapper.finalize
